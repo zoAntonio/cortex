@@ -41,7 +41,7 @@ export class HabitudesPage {
         this.chargement.set(false);
       },
       error: (e) => {
-        this.erreur.set(e.error?.erreur ?? 'Backend injoignable');
+        this.erreur.set(e.error?.erreur?.message ?? 'Backend injoignable');
         this.chargement.set(false);
       },
     });
