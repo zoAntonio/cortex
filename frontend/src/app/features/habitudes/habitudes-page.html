@@ -1,0 +1,35 @@
+<header class="entete">
+  <h1>Habitudes</h1>
+  <div class="annee">
+    <button (click)="changerAnnee(-1)" aria-label="Année précédente">‹</button>
+    <strong>{{ annee() }}</strong>
+    <button (click)="changerAnnee(1)" aria-label="Année suivante">›</button>
+  </div>
+</header>
+
+@if (chargement()) {
+  <p class="info">Chargement…</p>
+}
+
+@if (erreur()) {
+  <p class="info erreur">{{ erreur() }}</p>
+}
+
+@if (data(); as d) {
+  @for (h of d.habitudes; track h.cle) {
+    <section class="carte">
+      <div class="titre">
+        <h2>{{ h.nom }}</h2>
+        <span class="taux">{{ h.stats.tauxReussite }}%</span>
+      </div>
+
+      <app-heatmap-grid [annee]="d.annee" [jours]="h.jours" />
+
+      <p class="stats">
+        <span>🔥 {{ h.stats.serieEnCours }} en cours</span>
+        <span>🏆 {{ h.stats.meilleureSerie }} record</span>
+        <span>✔ {{ h.stats.total }} jours</span>
+      </p>
+    </section>
+  }
+}
