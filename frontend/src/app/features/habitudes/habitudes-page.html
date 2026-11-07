@@ -1,35 +1,51 @@
-<header class="entete">
-  <h1>Habitudes</h1>
-  <div class="annee">
-    <button (click)="changerAnnee(-1)" aria-label="Année précédente">‹</button>
+<header class="mb-5 flex items-center justify-between">
+  <h1 class="text-2xl font-bold">Habitudes</h1>
+
+  <div class="flex items-center gap-3">
+    <button
+      (click)="changerAnnee(-1)"
+      aria-label="Année précédente"
+      class="h-9 w-9 rounded-lg border border-[var(--bordure)] bg-[var(--carte)] text-lg"
+    >‹</button>
     <strong>{{ annee() }}</strong>
-    <button (click)="changerAnnee(1)" aria-label="Année suivante">›</button>
+    <button
+      (click)="changerAnnee(1)"
+      aria-label="Année suivante"
+      class="h-9 w-9 rounded-lg border border-[var(--bordure)] bg-[var(--carte)] text-lg"
+    >›</button>
   </div>
 </header>
 
 @if (chargement()) {
-  <p class="info">Chargement…</p>
+  <p class="py-8 text-center text-[var(--texte-doux)]">Chargement…</p>
 }
 
 @if (erreur()) {
-  <p class="info erreur">{{ erreur() }}</p>
+  <p class="py-8 text-center text-red-500">{{ erreur() }}</p>
 }
 
 @if (data(); as d) {
-  @for (h of d.habitudes; track h.cle) {
-    <section class="carte">
-      <div class="titre">
-        <h2>{{ h.nom }}</h2>
-        <span class="taux">{{ h.stats.tauxReussite }}%</span>
-      </div>
+  <div class="flex flex-col gap-4">
+    @for (h of d.habitudes; track h.cle; let i = $index) {
+      <section
+        class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4 shadow-sm"
+        [style.--cellule-on]="couleur(i)"
+      >
+        <div class="mb-3 flex items-baseline justify-between">
+          <h2 class="text-base font-semibold">{{ h.nom }}</h2>
+          <span class="text-sm font-semibold" [style.color]="couleur(i)">
+            {{ h.stats.tauxReussite }}%
+          </span>
+        </div>
 
-      <app-heatmap-grid [annee]="d.annee" [jours]="h.jours" />
+        <app-heatmap-grid [annee]="d.annee" [jours]="h.jours" />
 
-      <p class="stats">
-        <span>🔥 {{ h.stats.serieEnCours }} en cours</span>
-        <span>🏆 {{ h.stats.meilleureSerie }} record</span>
-        <span>✔ {{ h.stats.total }} jours</span>
-      </p>
-    </section>
-  }
+        <p class="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--texte-doux)]">
+          <span>🔥 {{ h.stats.serieEnCours }} en cours</span>
+          <span>🏆 {{ h.stats.meilleureSerie }} record</span>
+          <span>✔ {{ h.stats.total }} jours</span>
+        </p>
+      </section>
+    }
+  </div>
 }
