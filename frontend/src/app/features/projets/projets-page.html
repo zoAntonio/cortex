@@ -1,0 +1,85 @@
+<header class="mb-4">
+  <h1 class="mb-4 text-2xl font-bold">Projets</h1>
+
+  <div class="flex gap-1 overflow-x-auto rounded-full border border-[var(--bordure)] bg-[var(--carte)] p-1">
+    @for (f of filtres; track f.cle) {
+      <button
+        (click)="filtre.set(f.cle)"
+        class="flex-1 shrink-0 rounded-full px-3 py-2 text-sm font-medium"
+        [class.bg-[var(--accent)]]="filtre() === f.cle"
+        [class.text-white]="filtre() === f.cle"
+      >{{ f.libelle }}</button>
+    }
+  </div>
+</header>
+
+@if (chargement()) {
+  <p class="py-8 text-center text-[var(--texte-doux)]">Chargement…</p>
+}
+
+@if (erreur()) {
+  <p class="py-8 text-center text-red-500">{{ erreur() }}</p>
+}
+
+@if (data(); as d) {
+  <div class="flex flex-col gap-4">
+
+    <!-- Résumé global -->
+    <div class="grid grid-cols-3 gap-3">
+      <div class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-3">
+        <p class="text-xs text-[var(--texte-doux)]">Global</p>
+        <p class="text-xl font-bold">{{ d.resume.progression }}%</p>
+      </div>
+      <div class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-3">
+        <p class="text-xs text-[var(--texte-doux)]">Tâches</p>
+        <p class="text-xl font-bold">{{ d.resume.tachesTerminees }}/{{ d.resume.tachesTotal }}</p>
+      </div>
+      <div class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-3">
+        <p class="text-xs text-[var(--texte-doux)]">En retard</p>
+        <p class="text-xl font-bold" [class.text-red-500]="d.resume.enRetard > 0">{{ d.resume.enRetard }}</p>
+      </div>
+    </div>
+
+    <!-- Liste des projets -->
+    @for (p of visibles(); track p.id) {
+      <section class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4 shadow-sm">
+        <div class="mb-2 flex items-baseline justify-between gap-3">
+          <h2 class="text-base font-semibold">{{ p.nom }}</h2>
+          <span class="text-sm font-semibold text-[var(--accent)]">{{ p.progression }}%</span>
+        </div>
+
+        <div class="mb-3 h-2 overflow-hidden rounded-full bg-[var(--cellule-off)]">
+          <div class="h-full rounded-full bg-[var(--accent)]" [style.width.%]="p.progression"></div>
+        </div>
+
+        <p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[var(--texte-doux)]">
+          @if (p.total === 0) {
+            <span>Aucune tâche</span>
+          } @else {
+            <span>✔ {{ p.terminees }}/{{ p.total }} tâches</span>
+          }
+          @if (p.enRetard > 0) {
+            <span class="text-red-500">⚠ {{ p.enRetard }} en retard</span>
+          }
+          @if (p.prochaineEcheance) {
+            <span>📅 {{ date(p.prochaineEcheance) }}</span>
+          }
+        </p>
+
+        <p class="mt-2 flex flex-wrap gap-2 text-xs">
+          @if (p.statut) {
+            <span class="rounded-full border border-[var(--bordure)] px-2 py-0.5">{{ p.statut }}</span>
+          }
+          @if (p.priorite) {
+            <span
+              class="rounded-full px-2 py-0.5 text-white"
+              [style.background]="couleurPriorite(p.priorite)"
+            >{{ p.priorite }}</span>
+          }
+        </p>
+      </section>
+    } @empty {
+      <p class="py-8 text-center text-sm text-[var(--texte-doux)]">Aucun projet dans cette catégorie.</p>
+    }
+  </div>
+}

@@ -11,6 +11,8 @@ app.use('/api/notion', require('./features/notion-explorer/notion-explorer.route
 app.use('/api/habitudes', require('./features/habitudes/habitudes.routes'));
 app.use('/api/evolution', require('./features/evolution/evolution.routes'));
 app.use('/api/objectifs', require('./features/objectifs/objectifs.routes'));
+app.use('/api/projets', require('./features/projets/projets.routes'));
+
 // Toujours en dernier
 app.use(notFound);
 app.use(errorHandler);
