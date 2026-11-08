@@ -9,6 +9,7 @@ app.use(express.json());
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api/notion', require('./features/notion-explorer/notion-explorer.routes'));
 app.use('/api/habitudes', require('./features/habitudes/habitudes.routes'));
+app.use('/api/evolution', require('./features/evolution/evolution.routes'));
 
 // Toujours en dernier
 app.use(notFound);
