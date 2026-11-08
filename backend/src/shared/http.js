@@ -17,4 +17,12 @@ const entier = (valeur, { nom, min, max, defaut }) => {
   return n;
 };
 
-module.exports = { ok, asyncHandler, entier };
+// Date au format YYYY-MM-DD
+const dateISO = (valeur, { nom, defaut }) => {
+  if (valeur === undefined || valeur === '') return defaut;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(valeur) || Number.isNaN(Date.parse(valeur)))
+    throw new AppError(`Paramètre "${nom}" invalide (format YYYY-MM-DD)`, 400, 'PARAMETRE_INVALIDE');
+  return valeur;
+};
+
+module.exports = { ok, asyncHandler, entier, dateISO };

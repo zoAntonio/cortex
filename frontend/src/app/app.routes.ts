@@ -12,6 +12,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/habitudes/habitudes-page').then((m) => m.HabitudesPage),
       },
+      {
+        path: 'evolution',
+        loadComponent: () =>
+          import('./features/evolution/evolution-page').then((m) => m.EvolutionPage),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
