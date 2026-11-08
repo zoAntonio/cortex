@@ -11,7 +11,7 @@ interface Entree {
 const MENU: Entree[] = [
   { chemin: '/habitudes', libelle: 'Habitudes', icone: '🔥', pret: true },
   { chemin: '/evolution', libelle: 'Évolution', icone: '📈', pret: true },
-  { chemin: '/objectifs', libelle: 'Objectifs', icone: '🎯', pret: false },
+  { chemin: '/objectifs', libelle: 'Objectifs', icone: '🎯', pret: true },
   { chemin: '/projets', libelle: 'Projets', icone: '📁', pret: false },
 ];
 
