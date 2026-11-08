@@ -10,4 +10,5 @@ exports.findBetween = (debut, fin) =>
       ],
     },
     sorts: [{ property: 'Date', direction: 'ascending' }],
+    ttl: 30, 
   });
