@@ -1,0 +1,52 @@
+<app-page-header titre="Projets" />
+
+<app-onglets class="mb-4" [options]="filtres" [valeur]="filtre()" (valeurChange)="setFiltre($event)" />
+
+<app-etat [chargement]="chargement()" [erreur]="erreur()" />
+
+@if (data(); as d) {
+  <div class="flex flex-col gap-4">
+
+    <div class="grid grid-cols-3 gap-3">
+      <app-stat-card icone="etincelle" libelle="Global" [valeur]="d.resume.progression + '%'" />
+      <app-stat-card icone="coche" libelle="Tâches" [valeur]="d.resume.tachesTerminees + '/' + d.resume.tachesTotal" />
+      <app-stat-card icone="alerte" libelle="En retard" [valeur]="d.resume.enRetard" [ton]="d.resume.enRetard > 0 ? 'mauvais' : 'normal'" />
+    </div>
+
+    @for (p of visibles(); track p.id) {
+      <app-carte>
+        <div class="mb-2 flex items-baseline justify-between gap-3">
+          <h2 class="text-base font-semibold">{{ p.nom }}</h2>
+          <app-anneau [pct]="p.progression" [taille]="46" [trait]="5" />
+        </div>
+
+        <app-barre-progression class="mb-3" [pct]="p.progression" />
+
+        <p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[var(--texte-doux)]">
+          @if (p.total === 0) {
+            <span>Aucune tâche</span>
+          } @else {
+            <span class="inline-flex items-center gap-1"><app-icone nom="coche" [taille]="14" /> {{ p.terminees }}/{{ p.total }} tâches</span>
+          }
+          @if (p.enRetard > 0) {
+            <span class="inline-flex items-center gap-1 text-[var(--danger)]"><app-icone nom="alerte" [taille]="14" /> {{ p.enRetard }} en retard</span>
+          }
+          @if (p.prochaineEcheance) {
+            <span class="inline-flex items-center gap-1"><app-icone nom="calendrier" [taille]="14" /> {{ date(p.prochaineEcheance) }}</span>
+          }
+        </p>
+
+        <p class="mt-2 flex flex-wrap gap-2 text-xs">
+          @if (p.statut) {
+            <span class="badge">{{ p.statut }}</span>
+          }
+          @if (p.priorite) {
+            <span class="badge !text-white" [style.background]="couleurPriorite(p.priorite)">{{ p.priorite }}</span>
+          }
+        </p>
+      </app-carte>
+    } @empty {
+      <p class="py-8 text-center text-sm text-[var(--texte-doux)]">Aucun projet dans cette catégorie.</p>
+    }
+  </div>
+}

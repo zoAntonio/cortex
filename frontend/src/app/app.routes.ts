@@ -17,6 +17,21 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/evolution/evolution-page').then((m) => m.EvolutionPage),
       },
+      {
+        path: 'objectifs',
+        loadComponent: () =>
+          import('./features/objectifs/objectifs-page').then((m) => m.ObjectifsPage),
+      },
+      {
+        path: 'projets',
+        loadComponent: () =>
+          import('./features/projets/projets-page').then((m) => m.ProjetsPage),
+      },
+      {
+        path: 'revue',
+        loadComponent: () =>
+          import('./features/revue/revue-page').then((m) => m.RevuePage),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
