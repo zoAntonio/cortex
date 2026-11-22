@@ -24,7 +24,7 @@
 
           @for (o of j.objectifs; track o.id) {
             <p class="flex items-center gap-3 border-t border-[var(--bordure)] py-3 text-sm first:border-t-0">
-              <span>{{ o.accompli ? '✅' : '⬜' }}</span>
+              <app-icone [nom]="o.accompli ? 'cocheCercle' : 'cercle'" [taille]="20" [class]="o.accompli ? 'text-[var(--accent)]' : 'text-[var(--texte-doux)]'" />
               <span [class.line-through]="o.accompli" [class.opacity-60]="o.accompli">{{ o.nom }}</span>
             </p>
           } @empty {
@@ -55,7 +55,7 @@
 
               @for (j of o.jours; track $index) {
                 <p class="flex items-center gap-3 border-t border-[var(--bordure)] py-2 text-sm">
-                  <span>{{ j.accompli ? '✅' : '⬜' }}</span>
+                  <app-icone [nom]="j.accompli ? 'cocheCercle' : 'cercle'" [taille]="20" [class]="j.accompli ? 'text-[var(--accent)]' : 'text-[var(--texte-doux)]'" />
                   <span class="w-16 capitalize text-[var(--texte-doux)]">{{ court(j.date) }}</span>
                   <span>{{ j.nom }}</span>
                 </p>
@@ -73,7 +73,7 @@
         <app-carte>
           @for (o of m.objectifs; track o.id) {
             <p class="flex items-center gap-3 border-t border-[var(--bordure)] py-3 text-sm first:border-t-0">
-              <span>🎯</span><span>{{ o.nom }}</span>
+              <app-icone nom="cible" [taille]="18" class="text-[var(--accent)]" /><span>{{ o.nom }}</span>
             </p>
           } @empty {
             <p class="py-4 text-center text-sm text-[var(--texte-doux)]">Aucun objectif ce mois-ci.</p>

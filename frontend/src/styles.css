@@ -1,32 +1,107 @@
 @import "tailwindcss";
 
-:root {
-  --fond: #f5f6f8;
-  --carte: #ffffff;
-  --texte: #1c1e21;
-  --texte-doux: #6b7280;
-  --bordure: #e5e7eb;
-  --accent: #22a06b;
-  --cellule-off: #e5e7eb;
-  --cellule-on: #22a06b;
+/* Polices : Space Grotesk pour les titres et chiffres (look "HUD"), Inter pour le texte */
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
+/* Thème sombre par défaut (ambiance jeu) ; le thème clair suit la préférence du système */
+:root {
+  --fond: #0a0d16;
+  --carte: #131929;
+  --carte-haute: #1b2338;
+  --texte: #eef1fa;
+  --texte-doux: #8d96b2;
+  --bordure: #263049;
+  --accent: #38f2a6;
+  --accent-2: #7c5cff;
+  --sur-accent: #04130d;
+  --danger: #ff5d73;
+  --warn: #ffb547;
+  --cellule-off: #222b44;
+  --cellule-on: #38f2a6;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
   :root {
-    --fond: #111318;
-    --carte: #1b1e26;
-    --texte: #e8eaed;
-    --texte-doux: #9aa0a6;
-    --bordure: #2a2f3a;
-    --accent: #3ddc97;
-    --cellule-off: #2a2f3a;
-    --cellule-on: #3ddc97;
+    --fond: #f1f3fa;
+    --carte: #ffffff;
+    --carte-haute: #f6f7fc;
+    --texte: #12162a;
+    --texte-doux: #5d6684;
+    --bordure: #e0e5f2;
+    --accent: #0fb877;
+    --accent-2: #6a4bff;
+    --sur-accent: #ffffff;
+    --danger: #e5384f;
+    --warn: #d98a0b;
+    --cellule-off: #e3e7f3;
+    --cellule-on: #0fb877;
+    color-scheme: light;
   }
 }
 
+html { -webkit-tap-highlight-color: transparent; }
+
 body {
   margin: 0;
-  background: var(--fond);
+  min-height: 100dvh;
+  background:
+    radial-gradient(900px 420px at 85% -10%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 70%),
+    radial-gradient(700px 360px at -10% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%),
+    var(--fond);
+  background-attachment: fixed;
   color: var(--texte);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.01em; }
+
+button { cursor: pointer; font: inherit; color: inherit; }
+button:disabled { cursor: not-allowed; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- Composants réutilisables ---------- */
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  border-radius: 999px; border: 1px solid var(--bordure);
+  background: var(--carte-haute); padding: 0.45rem 0.85rem;
+  font-size: 0.75rem; font-weight: 600; line-height: 1;
+  transition: border-color .15s, transform .1s, background .15s;
+}
+.btn:hover:not(:disabled) { border-color: var(--accent); }
+.btn:active:not(:disabled) { transform: scale(0.96); }
+.btn:disabled { opacity: 0.4; }
+.btn-primary { background: var(--accent); color: var(--sur-accent); border-color: transparent; }
+.btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+
+.chip {
+  display: inline-flex; align-items: center; border-radius: 999px;
+  border: 1px solid var(--bordure); background: var(--carte);
+  padding: 0.35rem 0.8rem; font-size: 0.75rem; font-weight: 600;
+  transition: border-color .15s, background .15s;
+}
+.chip-on { background: var(--accent); color: var(--sur-accent); border-color: transparent; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 0.25rem; border-radius: 999px;
+  padding: 0.15rem 0.55rem; font-size: 0.7rem; font-weight: 600;
+  background: color-mix(in srgb, var(--texte-doux) 16%, transparent); color: var(--texte-doux);
+}
+.badge-danger { background: color-mix(in srgb, var(--danger) 18%, transparent); color: var(--danger); }
+.badge-warn { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+.badge-ok { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); }
+
+.champ {
+  border-radius: 999px; border: 1px solid var(--bordure); background: var(--carte);
+  padding: 0.35rem 0.7rem; font-size: 0.75rem; color: var(--texte);
+}
+
+.label-hud {
+  font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--texte-doux);
 }

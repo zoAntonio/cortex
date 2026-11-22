@@ -41,9 +41,7 @@
         @for (j of d.semaineActuelle.jours; track j.date) {
           <li class="flex items-center justify-between py-2 text-sm">
             <span class="w-16 font-medium capitalize">{{ j.jour }}</span>
-            <span class="text-[var(--texte-doux)]">
-              ✔ {{ nombre(j.tachesFaites) }}/3 tâches · 🔥 {{ nombre(j.nbHabitudes) }}
-            </span>
+            <span class="inline-flex items-center gap-3 text-[var(--texte-doux)]"><span class="inline-flex items-center gap-1"><app-icone nom="coche" [taille]="14" /> {{ nombre(j.tachesFaites) }}/3</span><span class="inline-flex items-center gap-1"><app-icone nom="flamme" [taille]="14" /> {{ nombre(j.nbHabitudes) }}</span></span>
             <strong>{{ nombre(j.note) }}</strong>
           </li>
         }
