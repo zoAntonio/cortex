@@ -7,6 +7,7 @@ module.exports = {
     echeance:  ['Due Date', 'date'],
     projetIds: ['Project', 'relation'],
     termine:   ['Completed', 'checkbox'],
+    aRevoir:   ['à Revoir', 'checkbox'],
     archive:   ['Archive', 'checkbox'],
   },
 };

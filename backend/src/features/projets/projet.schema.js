@@ -8,6 +8,7 @@ module.exports = {
     priorite: ['Priority', 'select'],
     debut:    ['Start Date', 'date'],
     fin:      ['End Date', 'date'],
+    areaIds:  ['Areas', 'relation'],
     archive:  ['Archive', 'checkbox'],
   },
 };

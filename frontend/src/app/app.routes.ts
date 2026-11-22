@@ -27,6 +27,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/projets/projets-page').then((m) => m.ProjetsPage),
       },
+      {
+        path: 'revue',
+        loadComponent: () =>
+          import('./features/revue/revue-page').then((m) => m.RevuePage),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
