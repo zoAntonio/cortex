@@ -1,2 +1,4 @@
-// Adresse de l'API (pas un secret). En production : l'URL du backend déployé.
-export const API_URL = 'http://localhost:3000/api';
+// Dev (ng serve, port 4200) : l'API est sur le port 3000 du même hôte.
+// Version construite : l'API est servie par le même serveur, chemin relatif.
+export const API_URL =
+  location.port === '4200' ? `http://${location.hostname}:3000/api` : '/api';

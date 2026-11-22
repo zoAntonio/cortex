@@ -3,6 +3,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 import { EvolutionService } from './evolution.service';
 import { EvolutionResponse } from '../../core/models/evolution';
+import { UI } from '../../shared/ui';
 
 const addDays = (d: string, n: number) =>
   new Date(Date.parse(d) + n * 86400000).toISOString().slice(0, 10);
@@ -15,7 +16,7 @@ const TEXTE = 'rgba(128,128,128,0.95)';
 
 @Component({
   selector: 'app-evolution-page',
-  imports: [BaseChartDirective],
+  imports: [BaseChartDirective, ...UI],
   templateUrl: './evolution-page.html',
 })
 export class EvolutionPage {

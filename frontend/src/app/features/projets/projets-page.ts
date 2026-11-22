@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ProjetsService } from './projets.service';
 import { ProjetsResponse } from '../../core/models/projets';
+import { UI } from '../../shared/ui';
 
 type Filtre = 'tous' | 'actifs' | 'pause' | 'termines';
 
@@ -13,6 +14,7 @@ const COULEURS_PRIORITE: Record<string, string> = {
 @Component({
   selector: 'app-projets-page',
   templateUrl: './projets-page.html',
+  imports: [...UI],
 })
 export class ProjetsPage {
   private service = inject(ProjetsService);
@@ -71,5 +73,9 @@ export class ProjetsPage {
     return new Date(d + 'T00:00:00Z').toLocaleDateString('fr-FR', {
       day: 'numeric', month: 'short', timeZone: 'UTC',
     });
+  }
+
+  setFiltre(f: string) {
+    this.filtre.set(f as Filtre);
   }
 }

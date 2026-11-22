@@ -1,41 +1,18 @@
-<header class="mb-5 flex items-center justify-between">
-  <h1 class="text-2xl font-bold">Habitudes</h1>
+<app-page-header titre="Habitudes">
+  <app-fleche sens="prec" label="Année précédente" (click)="changerAnnee(-1)" />
+  <strong>{{ annee() }}</strong>
+  <app-fleche sens="suiv" label="Année suivante" (click)="changerAnnee(1)" />
+</app-page-header>
 
-  <div class="flex items-center gap-3">
-    <button
-      (click)="changerAnnee(-1)"
-      aria-label="Année précédente"
-      class="h-9 w-9 rounded-lg border border-[var(--bordure)] bg-[var(--carte)] text-lg"
-    >‹</button>
-    <strong>{{ annee() }}</strong>
-    <button
-      (click)="changerAnnee(1)"
-      aria-label="Année suivante"
-      class="h-9 w-9 rounded-lg border border-[var(--bordure)] bg-[var(--carte)] text-lg"
-    >›</button>
-  </div>
-</header>
-
-@if (chargement()) {
-  <p class="py-8 text-center text-[var(--texte-doux)]">Chargement…</p>
-}
-
-@if (erreur()) {
-  <p class="py-8 text-center text-red-500">{{ erreur() }}</p>
-}
+<app-etat [chargement]="chargement()" [erreur]="erreur()" />
 
 @if (data(); as d) {
   <div class="flex flex-col gap-4">
     @for (h of d.habitudes; track h.cle; let i = $index) {
-      <section
-        class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4 shadow-sm"
-        [style.--cellule-on]="couleur(i)"
-      >
+      <app-carte [style.--cellule-on]="couleur(i)">
         <div class="mb-3 flex items-baseline justify-between">
           <h2 class="text-base font-semibold">{{ h.nom }}</h2>
-          <span class="text-sm font-semibold" [style.color]="couleur(i)">
-            {{ h.stats.tauxReussite }}%
-          </span>
+          <span class="text-sm font-semibold" [style.color]="couleur(i)">{{ h.stats.tauxReussite }}%</span>
         </div>
 
         <app-heatmap-grid [annee]="d.annee" [jours]="h.jours" />
@@ -45,7 +22,7 @@
           <span>🏆 {{ h.stats.meilleureSerie }} record</span>
           <span>✔ {{ h.stats.total }} jours</span>
         </p>
-      </section>
+      </app-carte>
     }
   </div>
 }

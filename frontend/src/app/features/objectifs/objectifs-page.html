@@ -1,57 +1,26 @@
-<header class="mb-4">
-  <h1 class="mb-4 text-2xl font-bold">Objectifs</h1>
+<app-page-header titre="Objectifs" />
 
-  <!-- Onglets -->
-  <div class="flex gap-1 rounded-full border border-[var(--bordure)] bg-[var(--carte)] p-1">
-    @for (o of onglets; track o.cle) {
-      <button
-        (click)="choisir(o.cle)"
-        class="flex-1 rounded-full px-3 py-2 text-sm font-medium"
-        [class.bg-[var(--accent)]]="onglet() === o.cle"
-        [class.text-white]="onglet() === o.cle"
-      >{{ o.libelle }}</button>
-    }
-  </div>
+<app-onglets [options]="onglets" [valeur]="onglet()" (valeurChange)="choisir($event)" />
 
-  <!-- Navigation de période -->
-  <div class="mt-4 flex items-center justify-between">
-    <button
-      (click)="naviguer(-1)"
-      aria-label="Période précédente"
-      class="h-9 w-9 rounded-lg border border-[var(--bordure)] bg-[var(--carte)] text-lg"
-    >‹</button>
-    <button (click)="retourAujourdhui()" class="text-sm font-semibold capitalize">
-      {{ periode() }}
-    </button>
-    <button
-      (click)="naviguer(1)"
-      aria-label="Période suivante"
-      class="h-9 w-9 rounded-lg border border-[var(--bordure)] bg-[var(--carte)] text-lg"
-    >›</button>
-  </div>
-</header>
+<div class="my-4 flex items-center justify-between">
+  <app-fleche sens="prec" label="Période précédente" (click)="naviguer(-1)" />
+  <button (click)="retourAujourdhui()" class="text-sm font-semibold capitalize">{{ periode() }}</button>
+  <app-fleche sens="suiv" label="Période suivante" (click)="naviguer(1)" />
+</div>
 
-@if (chargement()) {
-  <p class="py-8 text-center text-[var(--texte-doux)]">Chargement…</p>
-}
-
-@if (erreur()) {
-  <p class="py-8 text-center text-red-500">{{ erreur() }}</p>
-}
+<app-etat [chargement]="chargement()" [erreur]="erreur()" />
 
 @if (!chargement() && !erreur()) {
   @switch (onglet()) {
 
     @case ('jour') {
       @if (jour(); as j) {
-        <section class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4 shadow-sm">
+        <app-carte>
           <div class="mb-3 flex items-baseline justify-between">
             <h2 class="text-base font-semibold">{{ j.accomplis }}/{{ j.total }} accomplis</h2>
             <span class="text-sm font-semibold text-[var(--accent)]">{{ j.progression }}%</span>
           </div>
-          <div class="mb-4 h-2 overflow-hidden rounded-full bg-[var(--cellule-off)]">
-            <div class="h-full rounded-full bg-[var(--accent)]" [style.width.%]="j.progression"></div>
-          </div>
+          <app-barre-progression class="mb-4" [pct]="j.progression" />
 
           @for (o of j.objectifs; track o.id) {
             <p class="flex items-center gap-3 border-t border-[var(--bordure)] py-3 text-sm first:border-t-0">
@@ -61,7 +30,7 @@
           } @empty {
             <p class="py-4 text-center text-sm text-[var(--texte-doux)]">Aucun objectif ce jour-là.</p>
           }
-        </section>
+        </app-carte>
       }
     }
 
@@ -69,7 +38,7 @@
       @if (semaine(); as s) {
         <div class="flex flex-col gap-4">
           @for (o of s.objectifs; track o.id) {
-            <section class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4 shadow-sm">
+            <app-carte>
               <div class="mb-3 flex items-baseline justify-between gap-3">
                 <h2 class="text-base font-semibold">{{ o.nom }}</h2>
                 <span class="text-sm font-semibold capitalize" [style.color]="couleurNiveau(o.niveau)">
@@ -81,13 +50,7 @@
                 {{ o.reussis ?? 0 }} réussis · valide dès {{ o.seuilValide ?? '–' }} · excellent dès {{ o.seuilExcellent ?? '–' }}
               </p>
               @if (o.progression !== null) {
-                <div class="mb-3 h-2 overflow-hidden rounded-full bg-[var(--cellule-off)]">
-                  <div
-                    class="h-full rounded-full"
-                    [style.width.%]="o.progression"
-                    [style.background]="couleurNiveau(o.niveau)"
-                  ></div>
-                </div>
+                <app-barre-progression class="mb-3" [pct]="o.progression" [couleur]="couleurNiveau(o.niveau)" />
               }
 
               @for (j of o.jours; track $index) {
@@ -97,7 +60,7 @@
                   <span>{{ j.nom }}</span>
                 </p>
               }
-            </section>
+            </app-carte>
           } @empty {
             <p class="py-8 text-center text-sm text-[var(--texte-doux)]">Aucun objectif cette semaine.</p>
           }
@@ -107,16 +70,15 @@
 
     @case ('mois') {
       @if (mois(); as m) {
-        <section class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4 shadow-sm">
+        <app-carte>
           @for (o of m.objectifs; track o.id) {
             <p class="flex items-center gap-3 border-t border-[var(--bordure)] py-3 text-sm first:border-t-0">
-              <span>🎯</span>
-              <span>{{ o.nom }}</span>
+              <span>🎯</span><span>{{ o.nom }}</span>
             </p>
           } @empty {
             <p class="py-4 text-center text-sm text-[var(--texte-doux)]">Aucun objectif ce mois-ci.</p>
           }
-        </section>
+        </app-carte>
       }
     }
   }

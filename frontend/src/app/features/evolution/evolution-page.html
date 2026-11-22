@@ -1,83 +1,41 @@
-<header class="mb-5 flex items-center justify-between">
-  <h1 class="text-2xl font-bold">Évolution</h1>
+<app-page-header titre="Évolution">
+  <app-fleche sens="prec" label="Semaine précédente" (click)="semaine(-1)" />
+  @if (data(); as d) {
+    <strong class="text-sm">
+      {{ jourCourt(d.semaineActuelle.debut) }} – {{ jourCourt(d.semaineActuelle.fin) }}
+    </strong>
+  }
+  <app-fleche sens="suiv" label="Semaine suivante" [disabled]="!peutAvancer()" (click)="semaine(1)" />
+</app-page-header>
 
-  <div class="flex items-center gap-3">
-    <button
-      (click)="semaine(-1)"
-      aria-label="Semaine précédente"
-      class="h-9 w-9 rounded-lg border border-[var(--bordure)] bg-[var(--carte)] text-lg"
-    >‹</button>
-    @if (data(); as d) {
-      <strong class="text-sm">
-        {{ jourCourt(d.semaineActuelle.debut) }} – {{ jourCourt(d.semaineActuelle.fin) }}
-      </strong>
-    }
-    <button
-      (click)="semaine(1)"
-      [disabled]="!peutAvancer()"
-      aria-label="Semaine suivante"
-      class="h-9 w-9 rounded-lg border border-[var(--bordure)] bg-[var(--carte)] text-lg disabled:opacity-30"
-    >›</button>
-  </div>
-</header>
-
-@if (chargement()) {
-  <p class="py-8 text-center text-[var(--texte-doux)]">Chargement…</p>
-}
-
-@if (erreur()) {
-  <p class="py-8 text-center text-red-500">{{ erreur() }}</p>
-}
+<app-etat [chargement]="chargement()" [erreur]="erreur()" />
 
 @if (data(); as d) {
   <div class="flex flex-col gap-4">
 
-    <!-- Cartes de stats -->
     <div class="grid grid-cols-2 gap-3">
-      <div class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4">
-        <p class="text-xs text-[var(--texte-doux)]">Moyenne</p>
-        <p class="text-2xl font-bold">{{ nombre(d.semaineActuelle.stats.moyenne, '/20') }}</p>
-      </div>
-
-      <div class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4">
-        <p class="text-xs text-[var(--texte-doux)]">Vs semaine précédente</p>
-        <p
-          class="text-2xl font-bold"
-          [class.text-emerald-500]="d.comparaison.tendance === 'hausse'"
-          [class.text-red-500]="d.comparaison.tendance === 'baisse'"
-        >
-          {{ ecart(d.comparaison.ecartPourcent, '%') }}
-          @if (d.comparaison.tendance === 'hausse') { ▲ }
-          @if (d.comparaison.tendance === 'baisse') { ▼ }
-        </p>
-      </div>
-
-      <div class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4">
-        <p class="text-xs text-[var(--texte-doux)]">Meilleur jour</p>
-        @if (d.semaineActuelle.stats.meilleurJour; as m) {
-          <p class="text-2xl font-bold">{{ m.note }}/20</p>
-          <p class="text-xs text-[var(--texte-doux)]">{{ jourCourt(m.date) }}</p>
-        } @else {
-          <p class="text-2xl font-bold">–</p>
-        }
-      </div>
-
-      <div class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4">
-        <p class="text-xs text-[var(--texte-doux)]">Jours suivis</p>
-        <p class="text-2xl font-bold">{{ d.semaineActuelle.stats.joursSuivis }}/7</p>
-      </div>
+      <app-stat-card libelle="Moyenne" [valeur]="nombre(d.semaineActuelle.stats.moyenne, '/20')" />
+      <app-stat-card
+        libelle="Vs semaine précédente"
+        [valeur]="ecart(d.comparaison.ecartPourcent, '%')"
+        [ton]="d.comparaison.tendance === 'hausse' ? 'bon' : d.comparaison.tendance === 'baisse' ? 'mauvais' : 'normal'"
+      />
+      <app-stat-card
+        libelle="Meilleur jour"
+        [valeur]="d.semaineActuelle.stats.meilleurJour ? d.semaineActuelle.stats.meilleurJour.note + '/20' : '–'"
+        [sous]="d.semaineActuelle.stats.meilleurJour ? jourCourt(d.semaineActuelle.stats.meilleurJour.date) : null"
+      />
+      <app-stat-card libelle="Jours suivis" [valeur]="d.semaineActuelle.stats.joursSuivis + '/7'" />
     </div>
 
-    <!-- Graphique -->
-    <section class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4 shadow-sm">
+    <app-carte>
       <h2 class="mb-3 text-base font-semibold">Note journalière</h2>
       <div class="relative h-64">
         <canvas baseChart [data]="chartData()" [options]="options" type="line"></canvas>
       </div>
-    </section>
+    </app-carte>
 
-    <!-- Détail jour par jour -->
-    <section class="rounded-2xl border border-[var(--bordure)] bg-[var(--carte)] p-4 shadow-sm">
+    <app-carte>
       <h2 class="mb-3 text-base font-semibold">Détail</h2>
       <ul class="divide-y divide-[var(--bordure)]">
         @for (j of d.semaineActuelle.jours; track j.date) {
@@ -90,6 +48,6 @@
           </li>
         }
       </ul>
-    </section>
+    </app-carte>
   </div>
 }

@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { ObjectifsService } from './objectifs.service';
 import { JourResponse, MoisResponse, SemaineResponse } from '../../core/models/objectifs';
+import { UI } from '../../shared/ui';
 
 type Onglet = 'jour' | 'semaine' | 'mois';
 
@@ -19,6 +20,7 @@ const fmt = (d: string, opts: Intl.DateTimeFormatOptions) =>
 @Component({
   selector: 'app-objectifs-page',
   templateUrl: './objectifs-page.html',
+  imports: [...UI],
 })
 export class ObjectifsPage {
   private service = inject(ObjectifsService);
@@ -60,8 +62,8 @@ export class ObjectifsPage {
     this.charger();
   }
 
-  choisir(o: Onglet) {
-    this.onglet.set(o);
+  choisir(o: string) {
+    this.onglet.set(o as Onglet);
     this.charger();
   }
 
